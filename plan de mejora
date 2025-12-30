@@ -1,9 +1,0 @@
-propongo implementar las siguientes mejoras inmediatas:
-
-Validación de Datos: Añadir reglas de validación en QrFrame (Common).
-API Moderna de Cámara: Actualizar el selector de resolución de CameraX para usar la nueva API ResolutionSelector, mejorando la compatibilidad.
-Observabilidad: Añadir logs de tiempos de ejecución (ms) por etapa en MainActivity para detectar cuellos de botella.
-Manejo de Errores: Robustecer el flujo reactivo con captura de errores.
-(Nota: La migración a Hilt/Dagger la he pospuesto por ser un cambio de infraestructura mayor, priorizando la robustez del código actual. ¿Prefieres que la incluya?)
-
-¿Procedo con estas mejoras?
