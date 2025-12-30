@@ -1,0 +1,54 @@
+# Plan de Implementación: Lector QR Modular (MVP)
+
+## Objetivo
+Desarrollar un sistema de lectura QR modular, optimizado para Android, cumpliendo estrictamente con la separación de responsabilidades en 4 etapas: Captura, Preprocesamiento, Detección/Segmentación y Decodificación.
+
+## Preguntas para el Usuario / Decisiones Técnicas
+> [!IMPORTANT]
+> **Estructura Modular:** Propongo utilizar **Módulos de Android Library** separados para cada componente (`:capture`, `:processing`, `:decoding`) en lugar de simples paquetes. Esto fuerza la "modularidad para cambiar componentes sin afectar todo el sistema" de manera estricta. ¿Estás de acuerdo?
+
+> [!NOTE]
+> **Algoritmo Reed-Solomon:** ZXing ya incluye implementación de Reed-Solomon. El plan asume el uso de las primitivas de ZXing (`com.google.zxing`) envueltas en nuestras propias interfaces para cumplir el requisito de "Decodificación" sin reinventar la rueda matemática, a menos que desees una implementación *from scratch* (lo cual aumentaría significativamente la complejidad y riesgo de errores).
+
+## Arquitectura Propuesta
+
+### Estructura de Proyecto (Gradle)
+- **`app`**: Módulo de aplicación. Orquesta los componentes y maneja la UI.
+- **`common`**: Interfaces compartidas y modelos de dominio (ej. `QrFrame`, `Result`).
+- **`capture`**: Implementación de CameraX.
+- **`processing`**: Algoritmos de imagen (Grayscale, Otsu).
+- **`decoding`**: Lógica de QR y Reed-Solomon.
+
+### Detalles de Componentes
+
+#### 1. Módulo de Captura (`:capture`)
+- **Herramienta:** Android CameraX.
+- **Responsabilidad:** Entregar un stream de imágenes (`Bitmap` o `ImageProxy`) estandarizadas.
+- **Config:** `ResolutionSelector` para 640x480, `FocusMode.CONTINUOUS`.
+
+#### 2. Módulo de Preprocesamiento (`:processing`)
+- **Entrada:** Imagen Cruda.
+- **Salida:** Matriz de bits (BitMatrix) o Imagen Binarizada.
+- **Operaciones:**
+    - Conversión a Grises (LuminanceSource).
+    - Binarización (HybridBinarizer/Otsu).
+    - *Opcional:* Corrección de perspectiva simple si se usa OpenCV, o básica con matrices de transformación nativas.
+
+#### 3. Módulo de Detección y Decodificación (`:decoding`)
+- **Entrada:** Imagen Binarizada.
+- **Salida:** String/Objeto decodificado.
+- **Lógica:** Detección de Finder Patterns -> Alineación -> Extracción de Codewords -> Corrección Reed-Solomon -> Decodificación de Datos.
+
+## Plan de Pasos (Execution Flow)
+
+1.  **Setup Inicial (Paso 1)**: Crear proyecto Android en `scratch/Lector` con configuración Gradle multiproyecto.
+2.  **Definición de Interfaces (Paso 2)**: Crear módulo `common` con interfaces `ImageCapturer`, `ImageProcessor`, `QrDecoder`.
+3.  **Implementación Captura (Paso 3)**: Crear módulo `capture` integrando CameraX.
+4.  **Implementación Procesamiento (Paso 4)**: Crear módulo `processing` para manipular los pixels de la imagen.
+5.  **Implementación Decodificación (Paso 5)**: Crear módulo `decoding` integrando ZXing Core (solo la librería .jar/.dependency, no la UI).
+6.  **Integración UI (Paso 6)**: Conectar todo en `MainActivity` y dibujar el overlay.
+
+## Verificación
+- **Unit Testing:** Tests en JVM para `:processing` y `:decoding` usando imágenes de prueba en `src/test/resources`.
+- **Manual:** Compilación del APK y prueba de escaneo en entorno real/emulador.
+
