@@ -1,51 +1,50 @@
----
-# Prompt for System Analysis and Engineering Reverse
+# Prompt para el Análisis del Sistema e Ingeniería Inversa
 
-Analyze the complete architecture of the system in this repository, considering the following points to document each aspect systematically:
+Analiza la arquitectura completa del sistema en este repositorio considerando los siguientes puntos para documentar cada aspecto de manera sistemática:
 
-## 1. General Structure of the System
-- **List and explain all existing modules** (e.g., `:common`, `:capture`, `:processing`, `:decoding`, `:app`) and their responsibilities.
-- Describe the root-level configurations in `settings.gradle.kts` and `build.gradle.kts`, including project-wide dependencies or build scripts impacting the workflow.
+## 1. Estructura General del Sistema
+- **Enumera y explica todos los módulos existentes** (por ejemplo, `:common`, `:capture`, `:processing`, `:decoding`, `:app`) y sus responsabilidades.
+- Describe las configuraciones a nivel raíz en `settings.gradle.kts` y `build.gradle.kts`, incluyendo las dependencias globales o scripts de compilación que afectan el flujo de trabajo.
 
-## 2. Module-Specific Analysis
-- ### Module `:common`
-  - Document shared data structures (`QrFrame`, `QrResult`) and interfaces (`ImageCapturer`, `ImageProcessor`, `QrDecoder`).
-  - Clarify how these interfaces are implemented in other modules.
+## 2. Análisis Específico de Módulos
+- ### Módulo `:common`:
+  - Documenta las estructuras de datos compartidas (`QrFrame`, `QrResult`) y las interfaces (`ImageCapturer`, `ImageProcessor`, `QrDecoder`).
+  - Aclara cómo se implementan estas interfaces en otros módulos.
 
-- ### Module `:capture`
-  - Analyze how `CameraXImageCapturer` manages the data flow from CameraX.
-  - Explain lifecycle handling, concurrency, or thread management related to camera operations.
+- ### Módulo `:capture`:
+  - Analiza cómo `CameraXImageCapturer` gestiona el flujo de datos desde CameraX.
+  - Explica la gestión del ciclo de vida, la concurrencia o la administración de hilos relacionada con las operaciones de la cámara.
 
-- ### Module `:processing`
-  - Explore the logic for **rotating**, **binarizing**, and **enhancing** images (e.g., `applyRotation`, `applyOtsu`).
-  - Map out the pre-decoding image transformation pipeline.
+- ### Módulo `:processing`:
+  - Explora la lógica para **rotar**, **binarizar** y **mejorar** imágenes (por ejemplo, `applyRotation`, `applyOtsu`).
+  - Traza el flujo de transformación de imágenes previo a la decodificación.
 
-- ### Module `:decoding`
-  - Detail how the wrapper for ZXing translates data from `QrFrame` and performs decoding.
-  - Identify areas to integrate custom HEX decoding logic, potentially adjusting or adding new decoding paths.
+- ### Módulo `:decoding`:
+  - Detalla cómo el wrapper para ZXing traduce datos del `QrFrame` y realiza la decodificación.
+  - Identifica áreas para integrar la lógica personalizada de decodificación HEX, ajustando o añadiendo nuevas rutas de decodificación si es necesario.
 
-- ### Module `:app`
-  - Document the orchestration layer (e.g., `MainActivity`, `LectorApplication`).
-  - Highlight the end-to-end flow covering interactions with all other modules.
+- ### Módulo `:app`:
+  - Documenta la capa de orquestación (por ejemplo, `MainActivity`, `LectorApplication`).
+  - Destaca el flujo de extremo a extremo que cubre las interacciones con todos los otros módulos.
 
-## 3. Inter-module Interactions
-- Describe how modules communicate and transfer data (e.g., `Flow<QrFrame>` → `QrResult`).
-- Identify coupling or dependencies among the modules.
+## 3. Interacciones entre Módulos
+- Describe cómo los módulos se comunican y transfieren datos (por ejemplo, `Flow<QrFrame>` → `QrResult`).
+- Identifica el acoplamiento o las dependencias críticas entre módulos.
 
-## 4. Data Flow Analysis
-- Prepare documentation for each stage in the pipeline:
-  1. Capturing data in CameraX.
-  2. Preprocessing in `:processing`.
-  3. Decoding in `:decoding`.
-  4. Display/output in `:app`.
+## 4. Análisis del Flujo de Datos
+- Documenta el flujo de datos paso a paso:
+  1. Captura de datos en CameraX.
+  2. Preprocesamiento en `:processing`.
+  3. Decodificación en `:decoding`.
+  4. Visualización o salida en `:app`.
 
-## 5. Engineering Reverse Plan
-- Suggest points within the existing system to:
-  - **Replace or extend** the logic with HEX decoding capabilities.
-  - Add or modify functionality with minimal disruption to existing features.
-- Highlight code areas that would require tests for backward compatibility.
+## 5. Plan de Ingeniería Inversa
+- Sugiere puntos dentro del sistema existente para:
+  - **Reemplazar o extender** la lógica con capacidades de decodificación HEX.
+  - Añadir o modificar la funcionalidad con interrupciones mínimas en las características existentes.
+- Resalta las áreas de código que requerirían pruebas para asegurar compatibilidad retroactiva.
  
-## 6. Improvement Suggestions
-- Recommend ways to improve efficiency, maintainability, or performance, especially for devices with lower capabilities.
+## 6. Sugerencias de Mejora
+- Recomienda formas de mejorar la eficiencia, el mantenimiento o el rendimiento, especialmente para dispositivos con capacidades más limitadas.
 
-Objective: The goal is to document the full system to identify areas for applying engineering reverse precisely, enabling HEX decoding while preserving the system's robustness.
+Objetivo: El propósito es documentar el sistema completo para identificar áreas donde aplicar ingeniería inversa de manera precisa, habilitando la decodificación HEX mientras se preserva la robustez del sistema.
