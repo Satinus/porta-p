@@ -1,0 +1,91 @@
+Requisitos para Lector QR Modular (MVP)
+
+1. Resumen del Sistema
+El lector QR:
+- Detecta y decodifica códigos QR rápidamente.
+- Es modular para cambiar componentes sin afectar todo el sistema.
+- Está optimizado para dispositivos Android con recursos limitados.
+- Permite pruebas y compilación de manera sencilla en diversas plataformas.
+
+2. Arquitectura del sistema
+Dividido en 4 módulos principales, cada uno diseñado para ser intercambiable o modificable.
+
+A. Captura (Input de Cámara)
+- Objetivo: Captura imágenes para análisis posterior.
+- Requisitos específicos:
+  1. Uso de API CameraX para facilitar compatibilidad con múltiples dispositivos.
+     - Configuración genérica para diferentes marcas de hardware Android.
+     - Actividades habilitadas:
+       - Autoenfoque continuo (CONTINUOUS_PICTURE) para mantener nitidez.
+       - Bloqueo automático de exposición (AE_LOCK) para estabilizar iluminación.
+     - Resolución mínima soportada: 640x480 px para hardware de gama baja.
+  2. Mostrar un marco de alineación para guiar al usuario.
+  3. Captura imágenes en tiempo real con un tiempo de respuesta máximo de 200ms por frame.
+- Facilidad de prueba:
+  - Permitir captura de imágenes simuladas (archivos estáticos) para pruebas unitarias sin necesitar una cámara física.
+
+B. Preprocesamiento
+- Objetivo: Estandarizar la imagen y prepararla para análisis.
+- Requisitos específicos:
+  1. Conversión a escala de grises para simplificar análisis visual.
+  2. Binarización:
+     - Convertir la imagen capturada a un formato de blanco/negro usando Otsu's thresholding.
+  3. Corrección geométrica:
+     - Prevenir errores por inclinación, rotación o deformaciones de perspectiva.
+  4. Filtrado de ruido: Aplicar reducción de granularidad con filtros gausianos o medianos.
+- Facilidad de prueba:
+  - Modularizar el preprocesador para ejecutar pruebas con imágenes predefinidas y validar que la salida sea consistente.
+
+C. Detección y Segmentación
+- Objetivo: Identifica la región de interés (el código QR) y divide su contenido en módulos binarios.
+- Requisitos específicos:
+  1. Identificación:
+     - Reconocer los tres cuadros de alineación característicos del QR para encontrar orientación y forma.
+  2. Segmentación:
+     - Dividir el área detectada en una cuadrícula lógica de módulos blancos y negros.
+     - Adaptar las coordenadas a la corrección geométrica del preprocesador.
+- Facilidad de prueba:
+  - Crear funciones independientes para la segmentación de cuadros, verificando con imágenes sin procesar.
+
+D. Decodificación
+- Objetivo: Convertir los módulos en datos binarios y utilizar algoritmos de corrección de errores.
+- Requisitos específicos:
+  1. Convertir módulos en bits binarios (0/1).
+  2. Corrección de errores: Usar el algoritmo Reed-Solomon para reparar datos dañados o incompletos.
+  3. Decodificar información: Transformar datos binarios en su representación final (texto, URL, información codificada).
+- Facilidad de prueba:
+  - Diseñar pruebas unitarias con tramas binarizadas preprocesadas para evaluar la decodificación de datos en escenarios diversos (bits maliciosos, códigos parcialmente dañados, etc.).
+
+3. Especificaciones Técnicas
+- Rendimiento esperado: Decodificación completa en menos de 500ms en dispositivos estándar.
+- Consumo de recursos:
+  - Uso de buffers temporales optimizado (<10 MB en memoria).
+- Compatibilidad:
+  - Android API 24+ para equipos antiguos y optimización para hardware avanzado.
+
+Facilidad de compilación:
+- Código desarrollado para:
+  1. Gradle: Dependencias mínimas para integración directa en proyectos Android.
+  2. Documentación clara: Explicar pasos para pruebas en emuladores y dispositivos reales.
+  3. Compatibilidad inmediata: Librerías como CameraX y ZXing preconfiguradas.
+  4. Pipeline CI/CD: Automatización para verificar funcionalidad tras compilación.
+
+Estándares de Robustez:
+- Tolerancia angular: Hasta ±45°.
+- Iluminación baja: Mínimo 100 lux.
+- Corrección de errores: Reed-Solomon, hasta el 30% del área dañada.
+
+Pipeline recomendado:
+- Scripts automáticos para simplificar pruebas manuales y CI/CD.
+
+Flujo Modular de Operación
+1. Captura: Imagen obtenida y convertida a escala de grises.
+2. Preprocesamiento: Mejora de contraste y ajuste de geometría.
+3. Identificación QR: Detección de cuadros y segmentación binaria.
+4. Decodificación: Traducción de bits y corrección de redundancias.
+5. Salida: Muestra o ejecuta información decodificada.
+
+Herramientas:
+1. CameraX: Para la captura flexible de imágenes.
+2. ZXing: Motor de decodificación QR.
+3. OpenCV (opcional): Soporte para operaciones avanzadas en geometría.
