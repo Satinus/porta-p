@@ -1,40 +1,40 @@
-# Recommendations for ARCHITECTURE.md
+# Recomendaciones para ARCHITECTURE.md
 
 ---
 
-## 1. General Structure
-- Ensure all interfaces in the `:common` module have proper error handling and validation logic.
-- Clearly document the usage of each interface to maintain consistency across modules.
+## 1. Estructura General
+- Asegúrate de que todas las interfaces en el módulo `:common` manejen adecuadamente errores y validaciones.
+- Documenta claramente el uso de cada interfaz para mantener la consistencia entre módulos.
 
-## 2. Module-Specific Recommendations
+## 2. Recomendaciones Específicas por Módulo
 
-### **Module `:common` (Core)**
-- Consider adding utility classes to handle exceptions and ensure consistent error management across interfaces.
-- Include validation for the `QrFrame` data class to prevent invalid geometrical data.
+### **Módulo `:common` (Núcleo)**
+- Considera agregar clases utilitarias para manejar excepciones y garantizar una gestión de errores consistente entre interfaces.
+- Incluye validaciones para la clase `QrFrame` para evitar datos geométricos inválidos.
 
-### **Module `:capture` (Camera Input)**
-- Improve the flexibility of resolutions supported (e.g., adaptive resolution selection).
-- Include options for dynamic performance optimization to balance speed and image clarity.
+### **Módulo `:capture` (Entrada de Cámara)**
+- Mejora la flexibilidad de resoluciones soportadas (por ejemplo, selección adaptativa de resolución).
+- Incluye opciones para optimización dinámica del rendimiento que equilibren velocidad y claridad de imagen.
 
-### **Module `:processing` (Image Algorithms)**
-- Optimize the image rotation and thresholding operations to reduce computation times on low-end devices.
-- Evaluate lighter-weight alternatives for device-dependent image transformations to enable a smaller processing footprint.
+### **Módulo `:processing` (Algoritmos de Imagen)**
+- Optimiza las operaciones de rotación y umbralización de imagen para reducir los tiempos de cómputo en dispositivos de gama baja.
+- Evalúa alternativas más ligeras para transformaciones de imagen dependientes del dispositivo para lograr un menor consumo de recursos.
 
-### **Module `:decoding` (QR Logic)**
-- Include performance metrics and detailed logging during decoding to troubleshoot QR failures.
-- Consider testing and benchmarking the ZXing library with various QR formats and orientations for reliability checks.
+### **Módulo `:decoding` (Lógica QR)**
+- Incluye métricas de rendimiento y registros detallados durante la decodificación para resolver fallos de QR.
+- Considera pruebas y comparaciones de la biblioteca ZXing con varios formatos de QR y orientaciones para verificar su fiabilidad.
 
-### **Module `:app` (Orchestration & UI)**
-- Transition from manual dependency injection to a framework like Hilt/Dagger for better scalability and maintainability.
-- Introduce multilingual support or user feedback mechanisms within the `OverlayView` for accessibility improvements.
+### **Módulo `:app` (Orquestación y UI)**
+- Transiciona de una inyección de dependencias manual a un framework como Hilt/Dagger para lograr mejor escalabilidad y mantenimiento.
+- Introduce soporte multilingüe o mecanismos de retroalimentación del usuario dentro del `OverlayView` para mejorar la accesibilidad.
 
 ---
 
-## 3. Dependency Diagram
-- Periodically review module interdependencies to reduce coupling and ensure maintainable project scaling.
-- Explore the feasibility of converting the central `:common` module into a standalone library for portability.
+## 3. Diagrama de Dependencias
+- Revisa periódicamente las interdependencias entre módulos para reducir el acoplamiento y garantizar la escalabilidad del proyecto.
+- Explora la viabilidad de convertir el módulo central `:common` en una biblioteca independiente para mayor portabilidad.
 
-## 4. Data Flow Pipeline Recommendations
-- Enhance error handling across pipeline stages, especially for device-specific exceptions.
-- Introduce retry mechanisms in the `startCapture()` and decoding workflows to improve robustness in dynamic environments.
-- Add runtime logs and performance analytics to capture real-time debugging insights.
+## 4. Recomendaciones sobre el Flujo de Datos
+- Mejora el manejo de errores en todo el flujo de pipeline, especialmente para excepciones específicas del dispositivo.
+- Introduce mecanismos de reintento en los flujos de `startCapture()` y decodificación, para aumentar la robustez en entornos dinámicos.
+- Agrega registros de tiempo de ejecución y análisis de rendimiento para capturar conocimientos de depuración en tiempo real.
