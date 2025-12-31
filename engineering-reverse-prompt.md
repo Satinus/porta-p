@@ -1,50 +1,35 @@
-# Prompt para el Análisis del Sistema e Ingeniería Inversa
+---
+# Implementación de Decodificación HEX en el Sistema QR
 
-Analiza la arquitectura completa del sistema en este repositorio considerando los siguientes puntos para documentar cada aspecto de manera sistemática:
+Este documento detalla pasos específicos, estrategias de prueba, dependencias externas clave, y diagramas modulares relacionados con la incorporación de la capacidad de decodificar HEX en el sistema de QR.
 
-## 1. Estructura General del Sistema
-- **Enumera y explica todos los módulos existentes** (por ejemplo, `:common`, `:capture`, `:processing`, `:decoding`, `:app`) y sus responsabilidades.
-- Describe las configuraciones a nivel raíz en `settings.gradle.kts` y `build.gradle.kts`, incluyendo las dependencias globales o scripts de compilación que afectan el flujo de trabajo.
+## Especificidad
 
-## 2. Análisis Específico de Módulos
-- ### Módulo `:common`:
-  - Documenta las estructuras de datos compartidas (`QrFrame`, `QrResult`) y las interfaces (`ImageCapturer`, `ImageProcessor`, `QrDecoder`).
-  - Aclara cómo se implementan estas interfaces en otros módulos.
+En cada módulo se describen ejemplos claros y referencias específicas que faciliten la implementación y validación, tales como la clase **ZXingQrDecoder** utilizada dentro del módulo `:decoding`.
 
-- ### Módulo `:capture`:
-  - Analiza cómo `CameraXImageCapturer` gestiona el flujo de datos desde CameraX.
-  - Explica la gestión del ciclo de vida, la concurrencia o la administración de hilos relacionada con las operaciones de la cámara.
+- 🎯 **Ejemplo en el módulo :decoding:** Integración directa con la clase *ZXingQrDecoder* para procesar códigos HEX específicos.
+- 🔗 **Relación con módulos previos:** Interfaz con el módulo *:processing* para facilitar el preprocesamiento de imágenes capturadas.
 
-- ### Módulo `:processing`:
-  - Explora la lógica para **rotar**, **binarizar** y **mejorar** imágenes (por ejemplo, `applyRotation`, `applyOtsu`).
-  - Traza el flujo de transformación de imágenes previo a la decodificación.
+## Pruebas y Validación
 
-- ### Módulo `:decoding`:
-  - Detalla cómo el wrapper para ZXing traduce datos del `QrFrame` y realiza la decodificación.
-  - Identifica áreas para integrar la lógica personalizada de decodificación HEX, ajustando o añadiendo nuevas rutas de decodificación si es necesario.
+Secciones enfocadas en garantizar que los cambios cumplen con los criterios de aceptación:
 
-- ### Módulo `:app`:
-  - Documenta la capa de orquestación (por ejemplo, `MainActivity`, `LectorApplication`).
-  - Destaca el flujo de extremo a extremo que cubre las interacciones con todos los otros módulos.
+- ⚙️ **Integración HEX:** Pruebas unitarias diseñadas exclusivamente para entradas HEX.
+  - Datos simulados y casos límite.
+  - Validación cruzada utilizando casos de prueba independientes manuales.
+- 🧪 **Automatizadas:** Implementación de test suites usando herramientas como JUnit.
 
-## 3. Interacciones entre Módulos
-- Describe cómo los módulos se comunican y transfieren datos (por ejemplo, `Flow<QrFrame>` → `QrResult`).
-- Identifica el acoplamiento o las dependencias críticas entre módulos.
+## Dependencias Externas
 
-## 4. Análisis del Flujo de Datos
-- Documenta el flujo de datos paso a paso:
-  1. Captura de datos en CameraX.
-  2. Preprocesamiento en `:processing`.
-  3. Decodificación en `:decoding`.
-  4. Visualización o salida en `:app`.
+Este proyecto se apoya en diversas bibliotecas externas que son esenciales para su robustez y funcionalidad:
 
-## 5. Plan de Ingeniería Inversa
-- Sugiere puntos dentro del sistema existente para:
-  - **Reemplazar o extender** la lógica con capacidades de decodificación HEX.
-  - Añadir o modificar la funcionalidad con interrupciones mínimas en las características existentes.
-- Resalta las áreas de código que requerirían pruebas para asegurar compatibilidad retroactiva.
- 
-## 6. Sugerencias de Mejora
-- Recomienda formas de mejorar la eficiencia, el mantenimiento o el rendimiento, especialmente para dispositivos con capacidades más limitadas.
+1. **CameraX** - Gestión eficiente del hardware de cámara.
+2. **ZXing** - Decodificador empleado, que también soporta HEX dentro de su funcionalidad personalizada.
+3. Otras herramientas específicas relevantes para futuras especificaciones.
 
-Objetivo: El propósito es documentar el sistema completo para identificar áreas donde aplicar ingeniería inversa de manera precisa, habilitando la decodificación HEX mientras se preserva la robustez del sistema.
+## Diagramas de Flujo Modular
+
+_Enlace Placeholder:_
+
+🔲 **Descripción Modular:** Todo se inicia en el módulo *:processing*, que categoriza los datos entrantes y los transfiere al módulo `:decoding`. Este diagrama modelará la estrada de conexiones y los pasos sucesivos (pendiente agregar con herramientas tipo Lucidchart o diagramación UML).
+
